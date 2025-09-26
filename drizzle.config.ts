@@ -4,7 +4,7 @@ import "dotenv/config";
 export default {
   schema: "./db/schema.ts",
   out: "./drizzle",
-  driver: "libsql",
+  driver: "libsql" as "libsql",
   dbCredentials: {
     url: process.env.DATABASE_URL!,
     authToken: process.env.DATABASE_AUTH_TOKEN,
