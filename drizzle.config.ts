@@ -1,11 +1,10 @@
-
 import type { Config } from "drizzle-kit";
 import "dotenv/config";
 
 export default {
   schema: "./db/schema.ts",
   out: "./drizzle",
-  driver: "turso",
+  driver: "libsql" as "libsql",
   dbCredentials: {
     url: process.env.DATABASE_URL!,
     authToken: process.env.DATABASE_AUTH_TOKEN,
