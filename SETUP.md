@@ -1,343 +1,107 @@
-# Sangam - Alumni Network Setup Guide
+# Sangam Alumni Network - Setup Guide
 
-A modern Next.js-based alumni networking platform that connects students and alumni for mentorship, career guidance, and community building.
+This guide provides a comprehensive step-by-step walkthrough for setting up, running, and deploying the Sangam Alumni Network application. This guide will focus on a free deployment using Vercel and a free Turso database.
 
-## 🚀 Quick Start
+## 🚀 Prerequisites
 
-### Prerequisites
+Before you begin, ensure you have the following installed and configured:
 
-Before you begin, ensure you have the following installed on your system:
+- **Node.js:** A JavaScript runtime environment. You can download it from [nodejs.org](https://nodejs.org/).
+- **npm:** The Node.js package manager, which comes with the Node.js installation.
+- **Git:** A version control system for tracking changes in your code. You can download it from [git-scm.com](https://git-scm.com/).
+- **GitHub Account:** A GitHub account is required to deploy the application to Vercel. You can create one at [github.com](https://github.com/).
+- **Turso Account:** A Turso account is needed to create a free database. You can create one at [turso.tech](https://turso.tech/).
+- **Vercel Account:** A Vercel account is required for free deployment. You can create one at [vercel.com](https://vercel.com/).
 
-- **Node.js** (v18 or higher) - [Download here](https://nodejs.org/)
-- **npm** (comes with Node.js) or **yarn**
-- **Git** - [Download here](https://git-scm.com/)
-- A code editor like **VS Code** - [Download here](https://code.visualstudio.com/)
+## 🛠️ Local Setup
 
-### Step 1: Clone or Download the Project
+Follow these steps to get the application running on your local machine.
 
-**Option A: If you have the project as a ZIP file:**
-1. Extract the ZIP file to your desired location
-2. Open terminal/command prompt
-3. Navigate to the project folder:
-   ```bash
-   cd "path/to/your/project/folder"
-   ```
+### 1. Clone the Repository
 
-**Option B: If cloning from Git:**
+First, clone the project repository to your local machine using Git:
+
 ```bash
-git clone <repository-url>
+git clone https://github.com/your-username/sangam-alumni-network.git
 cd sangam-alumni-network
 ```
 
-### Step 2: Install Dependencies
+### 2. Install Dependencies
 
-Run the following command in your project directory:
+Install the necessary Node.js packages using npm:
 
 ```bash
 npm install
 ```
 
-This will install all the required packages listed in `package.json`.
+### 3. Set Up the Turso Database
 
-### Step 3: Start Development Server
+1.  **Create a Turso Account:** Go to [turso.tech](https://turso.tech/) and sign up for a free account.
+2.  **Install the Turso CLI:** Follow the instructions on the Turso website to install the command-line interface (CLI).
+3.  **Create a New Database:** Use the Turso CLI to create a new database:
+
+    ```bash
+    turso db create sangam-alumni-db
+    ```
+
+4.  **Get Database Credentials:** Get the database URL and an authentication token:
+
+    ```bash
+    turso db show sangam-alumni-db --url # Get the database URL
+    turso db tokens create sangam-alumni-db # Get the authentication token
+    ```
+
+### 4. Configure Environment Variables
+
+1.  **Create a `.env.local` file:** In the root of your project, create a new file named `.env.local`.
+2.  **Add Database Credentials:** Add the database URL and authentication token to the `.env.local` file:
+
+    ```
+    DATABASE_URL="your-turso-database-url"
+    DATABASE_AUTH_TOKEN="your-turso-auth-token"
+    ```
+
+    Replace `your-turso-database-url` and `your-turso-auth-token` with the credentials you obtained from the Turso CLI.
+
+### 5. Run Database Migrations
+
+With the environment variables configured, you can now run the database migrations to set up the database schema:
+
+```bash
+npx tsx migrate.ts
+```
+
+### 6. Run the Development Server
+
+Start the development server to run the application locally:
 
 ```bash
 npm run dev
 ```
 
-The application will start on `http://localhost:3000`
+Your application should now be running at `http://localhost:3000`.
 
-Open your browser and navigate to `http://localhost:3000` to see the application running.
+## 🌐 Deploy to Vercel (Free)
 
-## 🌐 Deployment Options
+Follow these steps to deploy the application to Vercel for free.
 
-### Option 1: Vercel (Recommended - Free & Easy)
+### 1. Push to GitHub
 
-Vercel is the easiest way to deploy Next.js applications and offers a generous free tier.
+Make sure your code is pushed to a GitHub repository.
 
-#### Step-by-Step Vercel Deployment:
+### 2. Create a Vercel Project
 
-1. **Create a Vercel Account:**
-   - Go to [vercel.com](https://vercel.com)
-   - Sign up with GitHub, GitLab, or Bitbucket
+1.  **Sign up for Vercel:** Go to [vercel.com](https://vercel.com/) and create an account.
+2.  **New Project:** From your Vercel dashboard, click on "Add New..." and select "Project".
+3.  **Import Repository:** Import your GitHub repository.
 
-2. **Prepare Your Code:**
-   - If not already done, push your code to a Git repository (GitHub, GitLab, or Bitbucket)
-   - Make sure all your changes are committed and pushed
+### 3. Configure Environment Variables
 
-3. **Deploy via Vercel Dashboard:**
-   - Login to your Vercel dashboard
-   - Click "New Project"
-   - Import your repository
-   - Vercel will automatically detect it's a Next.js project
-   - Click "Deploy"
+In the Vercel project settings, go to the "Environment Variables" section and add the `DATABASE_URL` and `DATABASE_AUTH_TOKEN` with the same values from your `.env.local` file.
 
-4. **Deploy via Vercel CLI (Alternative):**
-   ```bash
-   # Install Vercel CLI globally
-   npm install -g vercel
-   
-   # Login to Vercel
-   vercel login
-   
-   # Deploy from your project directory
-   vercel
-   
-   # Follow the prompts:
-   # - Set up and deploy? Y
-   # - Which scope? (select your account)
-   # - Link to existing project? N
-   # - What's your project's name? sangam-alumni-network
-   # - In which directory is your code located? ./
-   ```
+### 4. Deploy
 
-5. **Production Deployment:**
-   ```bash
-   vercel --prod
-   ```
-
-#### Vercel Configuration:
-
-Your `vercel.json` (optional, Vercel auto-detects Next.js):
-```json
-{
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/next"
-    }
-  ]
-}
-```
-
-### Option 2: Netlify
-
-1. **Create Netlify Account:**
-   - Go to [netlify.com](https://netlify.com)
-   - Sign up with GitHub, GitLab, or Bitbucket
-
-2. **Build Settings:**
-   - Build command: `npm run build`
-   - Publish directory: `.next`
-
-3. **Deploy:**
-   - Connect your repository
-   - Set build settings
-   - Deploy
-
-### Option 3: Traditional Web Hosting
-
-For shared hosting providers that support Node.js:
-
-1. **Build the application:**
-   ```bash
-   npm run build
-   ```
-
-2. **Upload files:**
-   - Upload the entire project folder to your hosting provider
-   - Make sure Node.js is enabled on your hosting account
-
-3. **Install dependencies on server:**
-   ```bash
-   npm install --production
-   ```
-
-4. **Start the application:**
-   ```bash
-   npm start
-   ```
-
-### Option 4: Self-Hosted (VPS/Cloud Server)
-
-#### Using PM2 (Process Manager):
-
-1. **Install PM2:**
-   ```bash
-   npm install -g pm2
-   ```
-
-2. **Build the application:**
-   ```bash
-   npm run build
-   ```
-
-3. **Start with PM2:**
-   ```bash
-   pm2 start npm --name "sangam-app" -- start
-   pm2 save
-   pm2 startup
-   ```
-
-#### Using Docker:
-
-1. **Create Dockerfile:**
-   ```dockerfile
-   FROM node:18-alpine
-
-   WORKDIR /app
-
-   COPY package*.json ./
-   RUN npm ci --only=production
-
-   COPY . .
-   RUN npm run build
-
-   EXPOSE 3000
-
-   CMD ["npm", "start"]
-   ```
-
-2. **Build and run:**
-   ```bash
-   docker build -t sangam-app .
-   docker run -p 3000:3000 sangam-app
-   ```
-
-## 🔧 Configuration
-
-### Environment Variables (Optional)
-
-Create a `.env.local` file in the root directory for environment-specific configurations:
-
-```env
-# Example environment variables
-NEXT_PUBLIC_APP_NAME=Sangam
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-
-# Add any API keys or configuration here
-# NEXT_PUBLIC_API_URL=your-api-url
-# DATABASE_URL=your-database-url
-```
-
-### Customization
-
-#### Update Branding:
-1. **Logo:** Replace logo in `public/` folder
-2. **Colors:** Modify colors in `src/app/globals.css` and Tailwind configuration
-3. **Content:** Update text content in component files
-
-#### Add Features:
-1. **Database:** The app is ready for database integration with Drizzle ORM and better-auth
-2. **Authentication:** Authentication system is already set up with better-auth
-3. **API Routes:** Add API routes in `src/app/api/` directory
-
-## 📂 Project Structure
-
-```
-sangam-alumni-network/
-├── public/                 # Static assets
-├── src/
-│   ├── app/               # Next.js App Router pages
-│   │   ├── page.tsx       # Home page
-│   │   ├── chat/          # Chat functionality
-│   │   ├── profile/       # User profiles
-│   │   ├── settings/      # Settings page
-│   │   ├── login/         # Authentication
-│   │   └── register/      # User registration
-│   ├── components/        # Reusable UI components
-│   │   ├── ui/           # Base UI components
-│   │   └── auth/         # Authentication components
-│   ├── hooks/            # Custom React hooks
-│   └── lib/              # Utility functions
-├── package.json          # Dependencies and scripts
-├── next.config.ts        # Next.js configuration
-├── tailwind.config.js    # Tailwind CSS configuration
-└── tsconfig.json         # TypeScript configuration
-```
-
-## 🛠️ Available Scripts
-
-```bash
-# Development
-npm run dev          # Start development server with Turbopack
-
-# Production
-npm run build        # Build for production
-npm start           # Start production server
-
-# Maintenance
-npm run lint        # Run ESLint for code quality
-```
-
-## 🎯 Features
-
-### Current Features:
-- ✅ **Modern UI/UX** - Clean, professional design with dark theme
-- ✅ **Responsive Design** - Works on desktop, tablet, and mobile
-- ✅ **User Profiles** - Detailed alumni and student profiles
-- ✅ **Chat System** - Real-time messaging interface
-- ✅ **Settings Management** - Comprehensive settings with multiple sections
-- ✅ **Authentication UI** - Login and registration forms
-- ✅ **Navigation** - Smooth navigation between pages
-- ✅ **Mentorship Display** - Ratings and mentorship information
-
-### Ready for Enhancement:
-- 🔄 **Database Integration** - Drizzle ORM and LibSQL ready
-- 🔄 **Real Authentication** - better-auth integration prepared
-- 🔄 **Real-time Chat** - WebSocket integration ready
-- 🔄 **File Uploads** - Image upload for profiles
-- 🔄 **Search & Filtering** - Advanced user search
-- 🔄 **Notifications** - Real-time notifications system
-
-## 🔒 Security & Performance
-
-### Built-in Security:
-- CSRF protection with Next.js
-- Environment variable protection
-- Secure authentication setup with better-auth
-- Input validation ready for implementation
-
-### Performance Features:
-- Next.js 15 with App Router for optimal performance
-- Static generation for faster loading
-- Optimized images and assets
-- Minimal bundle size with tree shaking
-
-## 🆘 Troubleshooting
-
-### Common Issues:
-
-1. **Port 3000 already in use:**
-   ```bash
-   # Use a different port
-   npm run dev -- -p 3001
-   ```
-
-2. **Build errors:**
-   ```bash
-   # Clear cache and reinstall
-   rm -rf .next node_modules package-lock.json
-   npm install
-   npm run build
-   ```
-
-3. **Module not found errors:**
-   ```bash
-   # Ensure all dependencies are installed
-   npm install
-   ```
-
-4. **TypeScript errors:**
-   ```bash
-   # Check TypeScript configuration
-   npx tsc --noEmit
-   ```
-
-### Getting Help:
-
-1. **Check the browser console** for error messages
-2. **Check the terminal** where you ran `npm run dev` for server errors
-3. **Verify all dependencies** are installed with `npm install`
-4. **Check Node.js version** with `node --version` (should be 18+)
-
-## 📞 Support
-
-For technical support or questions about the codebase:
-1. Check this README first
-2. Look for error messages in browser console and terminal
-3. Verify all setup steps were followed correctly
-4. Check that all dependencies installed properly
+Vercel will automatically detect that you are using Next.js and will configure the build settings for you. Click the "Deploy" button.
 
 ## 🎉 Success!
 
@@ -349,3 +113,40 @@ Once deployed, your Sangam Alumni Network platform will be live and ready for us
 - Build meaningful professional relationships
 
 The application is designed to be scalable and can handle growing user bases with proper hosting infrastructure.
+
+## 🎨 Customization
+
+### Update Branding:
+1. **Logo:** Replace the logo in the `public/` folder.
+2. **Colors:** Modify the colors in `src/app/globals.css` and the Tailwind CSS configuration.
+3. **Content:** Update the text content in the component files.
+
+### Add Features:
+1. **Database:** The app is ready for database integration with Drizzle ORM.
+2. **Authentication:** The authentication system is set up with `better-auth`.
+3. **API Routes:** Add API routes in the `src/app/api/` directory.
+
+## 📂 Project Structure
+
+The project follows a standard Next.js application structure.
+
+- `public/`: Static assets like images and fonts.
+- `src/app/`: The main application code, including pages and components.
+- `src/app/api/`: API routes for your application.
+- `db/`: Database-related files, including the schema and connection setup.
+- `drizzle/`: Database migration files generated by Drizzle Kit.
+- `drizzle.config.ts`: Configuration file for Drizzle Kit.
+- `migrate.ts`: Script for running database migrations.
+- `next.config.mjs`: Configuration file for Next.js.
+
+## 📜 Available Scripts
+
+- **Development**
+  - `npm run dev`: Starts the development server.
+
+- **Production**
+  - `npm run build`: Builds the application for production.
+  - `npm start`: Starts the production server.
+
+- **Maintenance**
+  - `npm run lint`: Runs ESLint for code quality checks.
